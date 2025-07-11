@@ -44,7 +44,29 @@ const destroy = async (req, res) => {
     }
 }
 
+const getById = async (req, res) => {
+    try {
+        console.log(req.query.id);
+        const result = await userService.getById(req.query.id);
+        return res.status(OK).json({
+            data: result,
+            err: {},
+            success: true,
+            message: "User fetched successfully"
+        });
+    } catch (error) {
+        console.log(`something went wrong in controller ${error}`);
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            data: {},
+            err: { error },
+            success: false,
+            message: "Can not delete user"
+        });
+    }
+}
+
 module.exports = {
     create,
-    destroy
+    destroy,
+    getById
 }
