@@ -46,7 +46,6 @@ const destroy = async (req, res) => {
 
 const getById = async (req, res) => {
     try {
-        console.log(req.query.id);
         const result = await userService.getById(req.query.id);
         return res.status(OK).json({
             data: result,
@@ -65,8 +64,51 @@ const getById = async (req, res) => {
     }
 }
 
+const signIn = async (req, res) => {
+    try {
+        const result = await userService.signIn(req.body.email, req.body.password);
+        return res.status(OK).json({
+            data: result,
+            err: {},
+            success: true,
+            message: "User signedIn successfully"
+        });
+    } catch (error) {
+        console.log(`something went wrong in controller ${error}`);
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            data: {},
+            err: { error },
+            success: false,
+            message: "Can not signIn"
+        });
+    }
+}
+
+const isAuthenticated = async (req, res) => {
+    try {
+        const token = req.headers['x-access-token'];
+        const result = await userService.isAuthenticated(token);
+        return res.status(OK).json({
+            data: result,
+            err: {},
+            success: true,
+            message: "User is authenticated and token is valid"
+        });
+    } catch (error) {
+        console.log(`something went wrong in controller ${error}`);
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            data: {},
+            err: { error },
+            success: false,
+            message: "Can not signIn"
+        });
+    }
+}
+
 module.exports = {
     create,
     destroy,
-    getById
+    getById,
+    signIn,
+    isAuthenticated
 }

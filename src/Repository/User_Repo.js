@@ -1,3 +1,4 @@
+const { canTreatArrayAsAnd } = require("sequelize/lib/utils");
 const { User } = require("../Models/index");
 
 class UserRepository {
@@ -29,11 +30,24 @@ class UserRepository {
 
     async getById(userId) {
         try {
-            console.log(userId);
             const result = await User.findByPk(userId, {
                 attributes: ['email', 'id']
             });
             console.log(result);
+            return result;
+        } catch (error) {
+            console.log(`something went wrong in user repo ${error}`);
+            throw { error };
+        }
+    }
+
+    async getUserByEmail(userEmail) {
+        try {
+            const result = await User.findOne({
+                where: {
+                    email: userEmail
+                }
+            });
             return result;
         } catch (error) {
             console.log(`something went wrong in user repo ${error}`);
