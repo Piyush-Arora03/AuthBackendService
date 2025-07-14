@@ -2,6 +2,7 @@ const { UserRepository } = require("../Repository/index");
 const jwt = require("jsonwebtoken");
 const { JWT_KEY } = require("../Config/ServerConfig");
 const bcrypt = require("bcrypt");
+const ValidationError = require('../Utils/ValidationError');
 
 const userRepository = new UserRepository();
 
@@ -11,8 +12,11 @@ class UserService {
             const result = await userRepository.create(data);
             return result;
         } catch (error) {
+            console.log(error);
+            // let validationError = new ValidationError(error);
+            // console.log(validationError);
             console.log("something went wrong in user service");
-            throw { error };
+            throw error;
         }
     }
 
@@ -48,15 +52,15 @@ class UserService {
         return newJWT;
     }
 
-    async isAuthenticated(token){
+    async isAuthenticated(token) {
         try {
-            const response=this.verifyToken(token);
-            if(!response){
-                throw {error:"invalid token"};
+            const response = this.verifyToken(token);
+            if (!response) {
+                throw { error: "invalid token" };
             }
-            const user=await userRepository.getById(response.id);
-            if(!user){
-                throw {error:"user does not exist anymore"};
+            const user = await userRepository.getById(response.id);
+            if (!user) {
+                throw { error: "user does not exist anymore" };
             }
             return user.id;
         } catch (error) {
@@ -95,9 +99,9 @@ class UserService {
         }
     }
 
-    async isAdmin(userId){
+    async isAdmin(userId) {
         try {
-            const response=await userRepository.isAdmin(userId);
+            const response = await userRepository.isAdmin(userId);
             return response;
         } catch (error) {
             console.log(`something went wrong in password comparision ${error}`);

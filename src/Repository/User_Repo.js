@@ -1,13 +1,15 @@
 const { User, Role } = require("../Models/index");
+const ValidationError = require('../Utils/ValidationError');
 
 class UserRepository {
     async create(data) {
         try {
             const result = await User.create(data);
+            console.log(result);
             return result;
         } catch (error) {
-            console.log(`something went wrong in user repo ${error}`);
-            throw { error };
+            if (error.name == 'SequelizeUniqueConstraintError') throw new ValidationError(error);
+            throw error;
         }
     }
 
@@ -21,7 +23,7 @@ class UserRepository {
             return true;
         } catch (error) {
             console.log(`something went wrong in user repo ${error}`);
-            throw { error };
+            throw error;
         }
     }
 

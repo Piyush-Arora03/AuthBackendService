@@ -15,11 +15,11 @@ const create = async (req, res) => {
         });
     } catch (error) {
         console.log(`something went wrong in controller ${error}`);
-        return res.status(INTERNAL_SERVER_ERROR).json({
+        return res.status(error.statusCode || INTERNAL_SERVER_ERROR).json({
             data: {},
-            err: { error },
+            err: error.explanation || 'somethign went wrong',
             success: false,
-            message: "Can not create user"
+            message: error.message || 'can not create user'
         });
     }
 }
