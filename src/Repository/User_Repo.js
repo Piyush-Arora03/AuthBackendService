@@ -1,11 +1,8 @@
-const { canTreatArrayAsAnd } = require("sequelize/lib/utils");
-const { User } = require("../Models/index");
+const { User, Role } = require("../Models/index");
 
 class UserRepository {
     async create(data) {
         try {
-            console.log(User);
-            console.log(data);
             const result = await User.create(data);
             return result;
         } catch (error) {
@@ -16,7 +13,7 @@ class UserRepository {
 
     async delete(UserId) {
         try {
-            const result = await User.destroy({
+            await User.destroy({
                 where: {
                     id: UserId
                 }
@@ -33,7 +30,6 @@ class UserRepository {
             const result = await User.findByPk(userId, {
                 attributes: ['email', 'id']
             });
-            console.log(result);
             return result;
         } catch (error) {
             console.log(`something went wrong in user repo ${error}`);
@@ -54,5 +50,22 @@ class UserRepository {
             throw { error };
         }
     }
+
+    async isAdmin(userId) {
+        try {
+            console.log(userId);
+            const user = await User.findByPk(userId);
+            const role = await Role.findOne({
+                where: {
+                    name: 'ADMIN'
+                }
+            });
+            return user.hasRole(role);
+        } catch (error) {
+            console.log(`something went wrong in user repo ${error}`);
+            throw { error };
+        }
+    }
 }
+
 module.exports = UserRepository;

@@ -105,10 +105,37 @@ const isAuthenticated = async (req, res) => {
     }
 }
 
+const isAdmin = async (req, res) => {
+    try {
+        const result = await userService.isAdmin(req.body.id);
+        if (result) return res.status(OK).json({
+            data: result,
+            err: {},
+            success: true,
+            message: "User authenticated"
+        });
+        return res.status(OK).json({
+            data: result,
+            err: {},
+            success: true,
+            message: "User not authenticated"
+        });
+    } catch (error) {
+        console.log(`something went wrong in controller ${error}`);
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            data: {},
+            err: { error },
+            success: false,
+            message: "can not authenticated user"
+        });
+    }
+}
+
 module.exports = {
     create,
     destroy,
     getById,
     signIn,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
 }

@@ -12,6 +12,19 @@ const authReqValidate=(req,res,next)=>{
     next();
 }
 
+const roleReqValidate=(req,res,next)=>{
+    if(!req.body.id){
+        return res.status(BAD_REQUEST).json({
+            data:{},
+            success:false,
+            err:"invalid credential",
+            message:"missing userId",
+        });
+    }
+    next();
+}
+
 module.exports={
-    authReqValidate
+    authReqValidate,
+    roleReqValidate
 }

@@ -95,7 +95,15 @@ class UserService {
         }
     }
 
-
+    async isAdmin(userId){
+        try {
+            const response=await userRepository.isAdmin(userId);
+            return response;
+        } catch (error) {
+            console.log(`something went wrong in password comparision ${error}`);
+            throw { error };
+        }
+    }
 }
 
 module.exports = UserService;
