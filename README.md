@@ -21,7 +21,7 @@ A Node.js authentication service using Express, Sequelize, JWT, and MySQL.
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/yourusername/AuthService.git
+git clone https://github.com/Piyush-Arora03/AuthBackendService.git
 cd AuthService
 ```
 
